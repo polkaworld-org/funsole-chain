@@ -1,12 +1,15 @@
-use support::{decl_storage, decl_module, StorageValue, dispatch::Result};
+use support::{decl_storage, decl_module, StorageMap, dispatch::Result};
 use system::ensure_signed;
 
-pub trait Trait: system::Trait {}
+//pub trait Trait: system::Trait {}
+pub trait Trait: balances::Trait {}
+
 
 decl_storage! {
     trait Store for Module<T: Trait> as KittyStorage {
         // Declare storage and getter functions here
-        Value: u64;
+        // Value: u64;
+        Value: map T::AccountId => u64;
     }
 }
 
@@ -17,7 +20,8 @@ decl_module! {
 
             let sender = ensure_signed(origin)?;
 
-            <Value<T>>::put(value);
+            //<Value<T>>::put(value);
+            <Value<T>>::insert(sender, value);
 
             Ok(())
         }
